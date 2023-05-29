@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import User from './entities/user.entity';
@@ -19,7 +19,7 @@ export class UsersService {
     try {
       const user = new User();
       Object.assign(user, createUserDto);
-      return this.userRepository.save(user);
+      return await this.userRepository.save(user);
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
@@ -27,15 +27,15 @@ export class UsersService {
 
   async findUsers(): Promise<User[] | undefined> {
     try {
-      return this.userRepository.find();
+      return await this.userRepository.find();
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
   }
 
-  async findUserById(id: number): Promise<User | undefined> {
+  async findUserById(id: string): Promise<User | undefined> {
     try {
-      return this.userRepository.findOne({
+      return await this.userRepository.findOne({
         where: {
           id,
         },
@@ -47,7 +47,7 @@ export class UsersService {
 
   async findUserByEmail(email: string): Promise<User | undefined> {
     try {
-      return this.userRepository.findOne({
+      return await this.userRepository.findOne({
         where: {
           email,
         },
@@ -58,7 +58,7 @@ export class UsersService {
   }
 
   async update(
-    id: number,
+    id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<User | undefined> {
     try {
@@ -67,17 +67,15 @@ export class UsersService {
       }
       const user = new User();
       Object.assign(user, { id, ...updateUserDto });
-      return this.userRepository.save(user);
+      return await this.userRepository.save(user);
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
   }
 
-  async remove(id: number) {
+  async remove(id: string): Promise<DeleteResult> {
     try {
-      return this.userRepository.delete({
-        id,
-      });
+      return await this.userRepository.delete(id);
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

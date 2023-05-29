@@ -1,14 +1,17 @@
-import { PrimaryGeneratedColumn } from 'typeorm';
-import { Entity, Column } from 'typeorm';
+import {
+  PrimaryGeneratedColumn,
+  Entity,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'users',
 })
 export default class User {
-  @PrimaryGeneratedColumn({
-    name: 'id_user',
-  })
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({
     name: 'email',
@@ -55,7 +58,7 @@ export default class User {
   @Column({
     name: 'mobile',
     type: 'varchar',
-    length: 100,
+    length: 20,
   })
   mobile: string;
 
@@ -65,4 +68,18 @@ export default class User {
     length: 500,
   })
   address: string;
+
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp with time zone',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp with time zone',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 }

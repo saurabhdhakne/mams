@@ -29,7 +29,7 @@ export class UsersController {
   @Get(':id')
   async findUserById(@Param('id') id: string): Promise<User | undefined> {
     try {
-      return this.usersService.findUserById(+id);
+      return this.usersService.findUserById(id);
     } catch (error) {
       throw error;
     }
@@ -56,7 +56,7 @@ export class UsersController {
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     try {
-      return this.usersService.update(+id, updateUserDto);
+      return this.usersService.update(id, updateUserDto);
     } catch (error) {
       throw error;
     }
@@ -72,7 +72,7 @@ export class UsersController {
         );
       }
 
-      return this.usersService.remove(+id);
+      return this.usersService.remove(id);
     } catch (error) {
       throw error;
     }

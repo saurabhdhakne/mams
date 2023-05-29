@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumberString, Length } from 'class-validator';
 import { IsNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
@@ -35,7 +35,8 @@ export class CreateUserDto {
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
-  @IsString()
+  @IsNumberString()
+  @Length(9, 20)
   mobile: string;
 
   @ApiProperty({ required: true })

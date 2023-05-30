@@ -8,10 +8,12 @@ import { DeleteResult, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import User from './entities/user.entity';
+import { LoggerService } from '../common/logger.service';
 
 @Injectable()
 export class UsersService {
   constructor(
+    private readonly logger: LoggerService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
@@ -21,6 +23,7 @@ export class UsersService {
       Object.assign(user, createUserDto);
       return await this.userRepository.save(user);
     } catch (error) {
+      this.logger.log(error, 'CreateUserService');
       throw new InternalServerErrorException(error);
     }
   }
@@ -29,6 +32,7 @@ export class UsersService {
     try {
       return await this.userRepository.find();
     } catch (error) {
+      this.logger.log(error, 'FindUsersService');
       throw new InternalServerErrorException(error);
     }
   }
@@ -41,6 +45,7 @@ export class UsersService {
         },
       });
     } catch (error) {
+      this.logger.log(error, 'FindUserByIdService');
       throw new InternalServerErrorException(error);
     }
   }
@@ -53,6 +58,7 @@ export class UsersService {
         },
       });
     } catch (error) {
+      this.logger.log(error, 'FindUserByEmailService');
       throw new InternalServerErrorException(error);
     }
   }
@@ -69,6 +75,7 @@ export class UsersService {
       Object.assign(user, { id, ...updateUserDto });
       return await this.userRepository.save(user);
     } catch (error) {
+      this.logger.log(error, 'UpdateUserService');
       throw new InternalServerErrorException(error);
     }
   }
@@ -77,6 +84,7 @@ export class UsersService {
     try {
       return await this.userRepository.delete(id);
     } catch (error) {
+      this.logger.log(error, 'RemoveUserService');
       throw new InternalServerErrorException(error);
     }
   }

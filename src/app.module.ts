@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { typeOrmConfigAsync } from './config/typeorm.config';
 import { UsersModule } from './users/users.module';
+import { LoggerService } from './common/logger.service';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { UsersModule } from './users/users.module';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, LoggerService],
 })
 export class AppModule {}

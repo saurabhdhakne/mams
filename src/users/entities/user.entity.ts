@@ -32,6 +32,7 @@ export default class User {
     name: 'middle_name',
     type: 'varchar',
     length: 50,
+    nullable: true,
   })
   middleName: string;
 
@@ -45,6 +46,7 @@ export default class User {
   @Column({
     name: 'age',
     type: 'int',
+    nullable: true,
   })
   age: number;
 
@@ -52,6 +54,7 @@ export default class User {
     name: 'gender',
     type: 'varchar',
     length: 100,
+    nullable: true,
   })
   gender: string;
 
@@ -66,6 +69,7 @@ export default class User {
     name: 'address',
     type: 'varchar',
     length: 500,
+    nullable: true,
   })
   address: string;
 

@@ -12,16 +12,21 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import User from './entities/user.entity';
 import { Put } from '@nestjs/common/decorators';
+import { LoggerService } from '../common/logger.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly logger: LoggerService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Get()
   async findAllUsers(): Promise<User[] | undefined> {
     try {
       return this.usersService.findUsers();
     } catch (error) {
+      this.logger.log(error, 'FindAllUsersController');
       throw error;
     }
   }
@@ -31,6 +36,7 @@ export class UsersController {
     try {
       return this.usersService.findUserById(id);
     } catch (error) {
+      this.logger.log(error, 'FindUserByIdController');
       throw error;
     }
   }
@@ -42,6 +48,10 @@ export class UsersController {
     try {
       const user = await this.usersService.findUserByEmail(createUserDto.email);
       if (user) {
+        this.logger.log(
+          `User with email ${createUserDto.email} is already exist.`,
+          'CreateUserController',
+        );
         throw new BadRequestException(
           `User with email ${createUserDto.email} is already exist.`,
         );
@@ -49,6 +59,7 @@ export class UsersController {
 
       return this.usersService.create(createUserDto);
     } catch (error) {
+      this.logger.log(error, 'CreateUserController');
       throw error;
     }
   }
@@ -58,6 +69,7 @@ export class UsersController {
     try {
       return this.usersService.update(id, updateUserDto);
     } catch (error) {
+      this.logger.log(error, 'UpdateUserController');
       throw error;
     }
   }
@@ -67,6 +79,10 @@ export class UsersController {
     try {
       const user = await this.findUserById(id);
       if (!user) {
+        this.logger.log(
+          `User with given id ${id} does not exist.`,
+          'RemoveUserController',
+        );
         throw new BadRequestException(
           `User with given id ${id} does not exist.`,
         );
@@ -74,6 +90,7 @@ export class UsersController {
 
       return this.usersService.remove(id);
     } catch (error) {
+      this.logger.log(error, 'RemoveUserController');
       throw error;
     }
   }
